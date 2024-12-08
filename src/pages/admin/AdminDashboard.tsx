@@ -13,7 +13,7 @@ import {
   VStack,
   Icon,
 } from '@chakra-ui/react';
-import { Code, Users, List, MessageSquare, Terminal } from 'lucide-react';
+import { List, Terminal } from 'lucide-react';
 
 interface AdminCardProps {
   title: string;

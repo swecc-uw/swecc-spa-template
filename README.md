@@ -10,6 +10,14 @@ Feel free to make changes to whatever you want in this repo. We'll try to minimi
 
 We also recommend using the setting up branch protection rules in the repo and to enforce code reviews before merging.
 
+| Command | Description |
+| --- | --- |
+| `npm install` | Install dependencies |
+| `npm run dev` | Start the development server |
+| `npm run build` | Compile the project |
+| `npm run lint` | Lint the project |
+| `npm run spellcheck` | Spellcheck the project |
+
 ## Deploying
 
 There are existing GitHub actions to deploy on push to the main branch. Just configure actions in the repo settings and it should start to work.

@@ -592,6 +592,9 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="fixed inset-0 w-screen h-screen overflow-hidden">
+      <a href="/" className="absolute top-4 left-4 z-40 text-white">
+
+      </a>
       <canvas
         ref={canvasRef}
         width={dimensions.width}

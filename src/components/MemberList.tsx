@@ -38,12 +38,12 @@ interface MemberListProps {
 }
 
 const MemberCard = ({ member }: { member: Member }) => {
-  const bgColor = useColorModeValue('white', 'gray.800');
-  const borderColor = useColorModeValue('gray.100', 'gray.700');
-  const textColor = useColorModeValue('gray.600', 'gray.300');
-  const mutedColor = useColorModeValue('gray.500', 'gray.400');
-  const hoverBg = useColorModeValue('gray.50', 'gray.700');
-  const iconColor = useColorModeValue('gray.600', 'gray.400');
+  const bgColor = 'white';
+  const borderColor = 'gray.100';
+  const textColor = 'gray.600';
+  const mutedColor = 'gray.500';
+  const hoverBg = 'gray.50';
+  const iconColor = 'gray.600';
 
   const fullName = resolveName(member);
 
@@ -65,7 +65,6 @@ const MemberCard = ({ member }: { member: Member }) => {
       w="100%"
     >
       <Flex direction={{ base: 'column', sm: 'row' }} gap={4}>
-        {/* Avatar Section */}
         <Avatar
           size={{ base: 'lg', md: 'xl' }}
           name={fullName}
@@ -74,9 +73,7 @@ const MemberCard = ({ member }: { member: Member }) => {
           borderColor="blue.400"
         />
 
-        {/* Content Section */}
         <Box flex="1">
-          {/* Header */}
           <Flex
             direction={{ base: 'column', md: 'row' }}
             gap={{ base: 2, md: 0 }}
@@ -152,7 +149,6 @@ const MemberCard = ({ member }: { member: Member }) => {
             </HStack>
           </Flex>
 
-          {/* Details */}
           <VStack align="stretch" spacing={2} mb={4}>
             {member.preview && (
               <Text color={textColor} fontSize="sm" noOfLines={2}>
@@ -181,7 +177,6 @@ const MemberCard = ({ member }: { member: Member }) => {
             </Flex>
           </VStack>
 
-          {/* Footer */}
           <Flex
             gap={3}
             direction={{ base: 'column', sm: 'row' }}

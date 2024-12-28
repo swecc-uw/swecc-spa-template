@@ -70,11 +70,11 @@ interface MemberProfileViewProps {
 }
 
 const MemberProfileView: React.FC<MemberProfileViewProps> = ({ member }) => {
-  const bgColor = useColorModeValue('white', 'gray.800');
-  const borderColor = useColorModeValue('gray.200', 'gray.700');
-  const iconColor = useColorModeValue('gray.600', 'gray.400');
-  const hoverColor = useColorModeValue('blue.500', 'blue.300');
-  const sectionBg = useColorModeValue('gray.50', 'gray.700');
+  const bgColor = 'white';
+  const borderColor = 'gray.200';
+  const iconColor = 'gray.600';
+  const hoverColor = 'blue.500';
+  const sectionBg = 'gray.50';
 
   const toast = useToast();
   const { onCopy: onDiscordCopy } = useClipboard(

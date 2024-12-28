@@ -64,6 +64,7 @@ const stripEmptySocials = (member: Member) => {
 
   return member;
 };
+
 interface MemberProfileViewProps {
   member: Member;
 }
@@ -177,69 +178,61 @@ const MemberProfileView: React.FC<MemberProfileViewProps> = ({ member }) => {
         maxW="4xl"
         w="full"
       >
-        {/* header */}
-
-        <Box
-          bg={bgColor}
-          borderRadius="xl"
-          boxShadow="xl"
-          border="1px"
-          borderColor={borderColor}
-          overflow="hidden"
-          maxW="4xl"
-          w="full"
-        >
-          <Box px={8} py={6}>
-            <Stack
-              direction={{ base: 'column', md: 'row' }}
-              spacing={8}
-              align="center"
+        <Box px={8} py={6}>
+          <Stack
+            direction={{ base: 'column', md: 'row' }}
+            spacing={8}
+            align="center"
+          >
+            <Avatar
+              size="2xl"
+              name={resolveName(member)}
+              src={member.profilePictureUrl}
+              bg="blue.500"
+            />
+            <VStack
+              align={{ base: 'center', md: 'start' }}
+              spacing={3}
+              flex="1"
             >
-              <Avatar
-                size="2xl"
-                name={resolveName(member)}
-                src={member.profilePictureUrl}
-                bg="blue.500"
-              />
-              <VStack
-                align={{ base: 'center', md: 'start' }}
-                spacing={3}
-                flex="1"
-              >
-                <HStack width="100%" justify="space-between">
-                  <Box>
-                    <Box fontSize="3xl" fontWeight="bold" lineHeight="shorter">
-                      {member.firstName} {member.lastName}
-                    </Box>
-                    <Box color="gray.500" fontSize="md">
-                      @{member.username}
-                    </Box>
+              <HStack width="100%" justify="space-between">
+                <Box>
+                  <Box fontSize="3xl" fontWeight="bold" lineHeight="shorter">
+                    {member.firstName} {member.lastName}
                   </Box>
-                  {currentUser && currentUser.id !== member.id && (
-                    <Button
-                      leftIcon={<Flag size={16} />}
-                      colorScheme="red"
-                      variant="ghost"
-                      size="sm"
-                      onClick={onOpen}
-                    >
-                      Report User
-                    </Button>
+                  <Box color="gray.500" fontSize="md">
+                    @{member.username}
+                  </Box>
+                  {member.preview && (
+                    <Box color="gray.500" fontSize="sm" mt={1}>
+                      {member.preview}
+                    </Box>
                   )}
-                </HStack>
-                <HStack spacing={2} flexWrap="wrap">
-                  <Badge colorScheme="purple" fontSize="sm">
-                    {member.role}
+                </Box>
+                {currentUser && currentUser.id !== member.id && (
+                  <Button
+                    leftIcon={<Flag size={16} />}
+                    colorScheme="red"
+                    variant="ghost"
+                    size="sm"
+                    onClick={onOpen}
+                  >
+                    Report User
+                  </Button>
+                )}
+              </HStack>
+              <HStack spacing={2} flexWrap="wrap">
+                <Badge colorScheme="purple" fontSize="sm">
+                  {member.role}
+                </Badge>
+                {member.groups?.map((group, i) => (
+                  <Badge key={i} colorScheme="blue" fontSize="sm">
+                    {group.name}
                   </Badge>
-                  {member.groups?.map((group, i) => (
-                    <Badge key={i} colorScheme="blue" fontSize="sm">
-                      {group.name}
-                    </Badge>
-                  ))}
-                </HStack>
-              </VStack>
-            </Stack>
-          </Box>
+                ))}
+              </HStack>
+            </VStack>
+          </Stack>
         </Box>
 
         <Divider />

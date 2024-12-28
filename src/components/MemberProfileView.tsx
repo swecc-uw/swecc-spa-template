@@ -6,7 +6,6 @@ import {
   Avatar,
   Link,
   Badge,
-  useColorModeValue,
   SimpleGrid,
   Divider,
   Stack,

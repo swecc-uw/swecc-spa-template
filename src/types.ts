@@ -266,3 +266,158 @@ export interface RawSignup {
   username: string;
   user_id: string;
 }
+
+export interface SessionUserInfo {
+  username: string;
+  id: number;
+}
+
+export interface RawAttendanceSession {
+  session_id: string;
+  key: string;
+  title: string;
+  expires: string;
+  attendees: SessionUserInfo[];
+}
+
+export interface AttendanceSession {
+  sessionId: string;
+  key: string;
+  title: string;
+  expires: Date;
+  attendees: SessionUserInfo[];
+}
+
+export type DiscordMessageStats = Record<string, number>;
+export type LeetcodeStats = Record<string, number>;
+export type GithubStats = Record<string, number>;
+
+export interface UserStats {
+  leetcode: LeetcodeStats;
+  github: GithubStats;
+}
+
+export interface RawStatsResponseRecord {
+  member: RawMemberData;
+  stats: DiscordMessageStats;
+}
+
+export interface StatsResponseRecord {
+  member: Member;
+  stats: DiscordMessageStats;
+}
+
+export interface CohortView {
+  id: number;
+  name: string;
+  members: Member[];
+}
+
+export interface CohortCreate {
+  name: string;
+  memberIds: number[];
+  level?: string;
+}
+
+export interface CohortUpdate {
+  id: number;
+  name: string;
+  memberIds: number[];
+}
+
+export type CohortFormData = Omit<CohortCreate, 'id'>;
+
+interface RawDiscordChannel {
+  channel_id: number;
+  channel_name?: string;
+  category_id?: number;
+  channel_type?: string;
+  guild_id: number;
+}
+
+interface DiscordChannel {
+  id: number;
+  name?: string;
+  categoryId?: number;
+  type: string;
+}
+
+export class DiscordServer {
+  constructor(
+    public id: string,
+    public channelIndex: Record<number, DiscordChannel>,
+    public categoryIndex: Record<number, string>,
+    public channelByCategory: Record<number, number[]>
+  ) {}
+
+  getChannel(id: number): DiscordChannel | undefined {
+    return this.channelIndex[id];
+  }
+
+  getCategoryName(id: number): string | undefined {
+    return this.categoryIndex[id];
+  }
+
+  getChannelsInCategory(id: number): number[] {
+    return this.channelByCategory[id] || [];
+  }
+
+  getAllCategories(): number[] {
+    return Object.keys(this.categoryIndex).map(Number);
+  }
+
+  getAllChannels(): DiscordChannel[] {
+    return Object.values(this.channelIndex);
+  }
+
+  static deserialize(rawChannels: RawDiscordChannel[]): DiscordServer {
+    const channelIndex: Record<number, DiscordChannel> = {};
+    const categoryIndex: Record<number, string> = {};
+    const channelByCategory: Record<number, number[]> = {};
+
+    rawChannels.forEach((channel) => {
+      if (channel.channel_type === 'CATEGORY') {
+        categoryIndex[channel.channel_id] = channel.channel_name || '';
+        channelByCategory[channel.channel_id] = [];
+      }
+    });
+
+    rawChannels.forEach((channel) => {
+      channelIndex[channel.channel_id] = {
+        id: channel.channel_id,
+        name: channel.channel_name,
+        categoryId: channel.category_id || undefined,
+        type: channel.channel_type || 'UNKNOWN',
+      };
+
+      if (channel.channel_type !== 'CATEGORY' && channel.category_id) {
+        if (!channelByCategory[channel.category_id]) {
+          channelByCategory[channel.category_id] = [];
+        }
+        channelByCategory[channel.category_id].push(channel.channel_id);
+      }
+    });
+
+    const serverId = rawChannels[0]?.guild_id?.toString() || '';
+
+    return new DiscordServer(
+      serverId,
+      channelIndex,
+      categoryIndex,
+      channelByCategory
+    );
+  }
+
+  getChannelsByCategory(): {
+    categoryId: number;
+    channels: DiscordChannel[];
+  }[] {
+    return this.getAllCategories().map((categoryId) => ({
+      categoryId,
+      channels: this.getChannelsInCategory(categoryId)
+        .map((channelId) => this.getChannel(channelId))
+        .filter((channel): channel is DiscordChannel => channel !== undefined)
+        .sort((a, b) => (a.name || '').localeCompare(b.name || '')),
+    }));
+  }
+}
